@@ -5,7 +5,20 @@ namespace RPS.Tests
 {
     public class GamePlayed : IEvent
     {
-        public GamePlayed When(IEvent @event) => this;
+        public GamePlayed When(IEvent @event) => @event switch
+        {
+            RoundEnded e => RoundEndedEvent(e),
+            _ => this,
+        };
+
+        public GamePlayed RoundEndedEvent(RoundEnded @event)
+        {
+            this.Winner = @event.Winner;
+            this.Looser = @event.Looser;
+
+            return this;
+        }
+
         public Guid GameId { get; set; }
         public int Rounds { get; set; }
         public string Winner { get; set; }
